@@ -10,3 +10,8 @@ urlpatterns = [
  url(r'^authors/$', views.AuthorListView.as_view(), name='authors'),  
  url(r'^author/(?P<pk>\d+)$', views.AuthorDetailView.as_view(), name='author-detail'),
 ]
+
+#Add Django site authentication urls (for login, logout, password management)
+urlpatterns += [   
+    url(r'^mybooks/$', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
+]
