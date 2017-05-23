@@ -34,6 +34,15 @@
    {% endif %}  
   		</ul>
           <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+          {% if user.is_staff %}
+   <hr />
+   <ul class="sidebar-nav">
+   <li>Staff</li>
+   {% if perms.catalog.can_mark_returned %}
+   <li><a href="{% url 'all-borrowed' %}">All borrowed</a></li>
+   {% endif %}
+   </ul>
+    {% endif %}
      {% endblock %}
       </div>
       <div class="col-sm-10 ">
