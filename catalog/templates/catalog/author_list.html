@@ -4,9 +4,13 @@
 
 <h1>Author List</h1>
 
+{% if user.is_authenticated %}
+<p><a href="{{% url 'author_create'}}">Create New Auther</a></p>
+{% endif %}
 {% if author_list %}
   <ul>
 
+    
   {% for author in author_list %}
     <li>
       <a href="{{ author.get_absolute_url }}">
