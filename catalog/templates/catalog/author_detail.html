@@ -12,7 +12,6 @@
 {% for book in author.book_set.all %}
   <dt><a href="{% url 'book-detail' book.pk %}">{{book}}</a> ({{book.bookinstance_set.all.count}})</dt>
   <dd>{{book.summary}}</dd>
-  <dt><a= href="{% url 'author_delete' book.pk}">Delete Author</a></a=>dt>
 {% endfor %}
 </dl>
 
