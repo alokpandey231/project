@@ -103,3 +103,64 @@ print("here1")
 df = pd.DataFrame({'Date':date,'Press announcements':news,'Details':parag,'Release dates':rel_dates})
 df.to_csv('press_announcements.csv', index=False,encoding='utf-8-sig')
 
+list =  ['$ -$ 1,031.6$ -',
+ '-64.5-',
+ '-614.8-',
+ '761.124.1-',
+ '-392.6-',
+ '583.82.0-',
+ '-176.0-',
+ '527.7--',
+ '487.1--',
+ '-279.7-',
+ '-8.0-',
+ '342.47.2-',
+ '-130.1-',
+ '-64.2-',
+ '-187.7-',
+ '237.30.4-',
+ '217.82.8-',
+ '198.8--',
+ '169.217.6-',
+ '176.51.3-',
+ '130.845.7-',
+ 'nan',
+ '-43.3-',
+ '-15.2-',
+ '139.7--',
+ '128.00.3-',
+ '115.8--',
+ '94.6--',
+ '-6.4-',
+ '85.0--',
+ '56.12.3-',
+ '-0.4-',
+ '50.9--',
+ '71.0--',
+ '49.0--',
+ '-6.3-',
+ '-0.7-',
+ '9.5--',
+ '690.8379.539.5',
+ '$ 5,322.9$ 3,504.7$ 39.5']
+#process the list
+print ("lenght of list is",len(list))
+for i in range(0,len(list)):
+    list[i] = list[i].replace("$","").replace(" ","")
+    list[i] = list[i].split("-")
+final_list = []
+#change the values
+for i in list:
+    print (len(i))
+    if len(i) == 3:
+        print (len(i))
+        sub_list = []
+        sub_list.insert(0,i[0])
+        sub_list.insert(1,i[1])
+        sub_list.insert(2,i[2])
+        final_list.append(sub_list)
+print (final_list)
+print ("lenght of final list is",len(final_list))
+
+
+#print (list)
