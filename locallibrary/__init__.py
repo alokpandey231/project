@@ -181,3 +181,106 @@ class Spider(XMLFeedSpider,scrapy.Spider):
 
     def err_fun(self, failure):
         print("IN ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", failure)
+import urllib2
+from lxml import etree as ET
+#reddit parse
+from dateutil.parser import parse
+
+def is_date(string, fuzzy=False):
+    try:
+        return parse(string, fuzzy=True)
+
+    except ValueError:
+        return False
+
+def get_itertag(url):
+    print url
+    def most_frequent(List):
+        counter = 0
+        num = List[0]
+
+        for i in List:
+            curr_frequency = List.count(i)
+            if(curr_frequency> counter):
+                counter = curr_frequency
+                num = i
+
+        if counter >1:
+            return num
+
+        else:
+            return None
+
+    site = url
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0'}
+    req = urllib2.Request(site, headers=headers)
+    reddit_file = urllib2.urlopen(req)
+    #
+    #entire feed
+    tree =  ET.ElementTree(file = reddit_file)
+    print (reddit_file.read())
+
+    ############## get the root node
+    root = (tree.getroot())
+    print ("root",root.tag)
+    x = [ child.tag for child in root ]
+    print(x)
+    ######  there can be multiple notes till the main node
+    if len(x) == 1:
+        x = root.find(x[0])
+    #subchild = ET.Element('channel')
+    #getchildren
+        tags = [ child.tag for child in x ]
+
+    else:
+        print "more thann one node"
+        x = root
+        tags = [ child.tag for child in x ]
+    #######################################################################################
+
+    print (list(tags))
+    max_data = most_frequent(tags)
+    print (max_data,"max data ")
+    print (list(x.find(max_data)))
+    if max_data is not None and len(list(x.find(max_data))) > 0:
+        print ("in if")
+        if len([ child.tag for child in x.find(max_data) ]) > 1:
+            itertag= max_data
+
+    else:
+        print ("in else")
+        for child in x:
+            if len(list(child)) > 1:
+                itertag = child.tag
+
+    data_node = x.findall(str(itertag))
+    print ((data_node))
+    for i in data_node:
+        for data in i:
+	    
+            try:
+		print data.text
+                text =  (data.text).strip()
+                if (text.startswith('https://') or text.startswith('http://')):
+                    print "link",text
+                elif len(text) < 100:
+                    date = is_date(text)
+                    if  date is not False:
+                        print "date",date
+            except:
+                print ("error in data",data)
+                try:
+                    link =  data.attrib['href']
+                    print "link",link
+                except:
+                    pass
+
+
+urls = ['https://www.pharmiweb.com/rss/press-releases','https://www.drugs.com/feeds/medical_news.xml','https://www.drugs.com/feeds/headline_news.xml','https://www.drugs.com/feeds/clinical_trials.xml','https://www.drugs.com/feeds/fda_alerts.xml','https://www.drugs.com/feeds/new_drug_approvals.xml','https://www.drugs.com/feeds/new_drug_applications.xml','https://www.fiercepharma.com/rss/xml','http://www.bio-medicine.org/inc/biomed/medicine-technology.asp','http://www.bio-medicine.org/inc/biomed/medicine-news.asp','http://www.bio-medicine.org/inc/biomed/biology-technology.asp','http://www.bio-medicine.org/inc/biomed/biology-news.asp','https://seekingalpha.com/market_currents.xml','https://www.pharmiweb.com/rss/press-releases','http://www.appliedclinicaltrialsonline.com/sitefeed/2568']
+print (len(urls))
+#iter_tag = []
+#for url in urls:
+#    data = get_itertag(url)
+
+print ("itertag",get_itertag('http://www.appliedclinicaltrialsonline.com/sitefeed/2568'))
+#print ("itertag",iter_tag)
